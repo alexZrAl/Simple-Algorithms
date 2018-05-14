@@ -3,7 +3,7 @@ import TuringMachine as TM
 def constructState():
     '''
         Construct a mapping of TM states and returns them
-        (think of this as writing code in an actual computer)
+        (think of this as wiring an actual computer, what a pain in the back side)
     '''
     states = dict()
 
@@ -20,51 +20,38 @@ def constructState():
 
     return states
 
-def parseMachineCode(states, code):
-    '''
-        Parses input string code into TM states(node, edge in a weighed graph)
-        @param states: A directed graph of TM states, stored as python dict
-        @param code: Machine code for TM, format: 
-            "[current state] [read] [target state] [write] [pointer movement]"
-            [read] can consist of multiple chars separated by comma
-            [write] can have at most 1 character
-            if [read] or [write] is empty, put a single comma ',' there
-    '''
-    code = code.split(' ')
 
-    if code[0] not in states:
-        states[code[0]] = set()
+def getStatesFromFile(filename):
+    '''
+        Use code from a file to configure the TM
+        @param filename: a file with TM machine code
+        @return states: formatted TM states
+    '''
+    states = dict()
+    for line in open(filename, 'r'):
+        line = line.strip("\n").split(' ')
+        for i in range(0, len(line)):
+            line[i] = line[i].strip("{").strip("}")
+        if line[0] not in states:
+            states[line[0]] = set()
+        states[line[0]].add(TM.Instruction(line[2], [line[1], line[3], line[4]]))
     
-    reads = code[1].split(',')
-
-    if code[3] == ',':  # this should work for now
-        code[3] = ''
-
-    for char in reads:
-        states[code[0]].add(TM.Instruction(code[2], [char, code[3], code[4]]))
-
+    return states
 
 if __name__ == "__main__":
+    
 
-    #states = constructState()
-
-    states = dict()
-
-    parseMachineCode(states, "S1 *,0 S1 , R")
-    parseMachineCode(states, "S1 1 S2 , R")
-    parseMachineCode(states, "S1 # N , S")
-
-    parseMachineCode(states, "S2 1 Y , S")
-    parseMachineCode(states, "S2 0 S1 , R")
-    parseMachineCode(states, "S2 # N , S")
+    states = getStatesFromFile("FindTwo1.txt")
 
     # This input has only '1', NO '11', ends at '#'
+    print("Tape 1, does not have substring \'11\':")
     tape = TM.Tape(['*', '0', '0', '1', '0', '0', '0', '0', '0', '0', '#', '1', '1']) 
     tape.print()
     findTwoConsecutiveOnes = TM.TuringMachine(tape, states)
     findTwoConsecutiveOnes.execute("S1")
 
     # This input has a '11'
+    print("Tape 2, does have substring \'11\':")
     tapeGood = TM.Tape(['*', '0', '0', '0', '0', '0', '1', '1', '0', '0', '#'])
     tapeGood.print()
     findTwoConsecutiveOnes = TM.TuringMachine(tapeGood, states)

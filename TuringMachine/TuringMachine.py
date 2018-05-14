@@ -34,8 +34,8 @@ class Instruction:
 
     def __init__(self, endState, condition):
         '''
-            if currentState && pointer reads == list[0], move pointer according to list[2] and write list[1] AFTER MOVING
-            after that, switch to endState
+            if currentState && pointer reads == list[0], write list[1] BEFORE moving pointer according to list[2]
+            after all these, switch current state to endState
 
             @param endState:    string, the resulting state of the beginState and the condition
 
@@ -65,12 +65,6 @@ class TuringMachine:
         
         The TM takes a Tape as input.
         The machine is capable of solving decision problems.(turing-decidable languages)
-
-/*        
-        Machine statest are represented in the form of TM machine code:
-                {current state}{read}{target state}{write}{pointer movement}
-        Therefore the machine itself does NOT store the states.
-*/
     '''
 
     def __init__(self, tape, states):
@@ -89,7 +83,8 @@ class TuringMachine:
         '''
             Moves the pointer of the TM left or right for some number of steps
 
-            @param direction:   Must be either 'L' or 'R'
+            @param direction:   Must be either 'L' or 'R' in order to move pointer
+                                if neither 'L' nor 'R' pointer is NOT moved
             @param steps:   Integer, preferably positive integer
         '''
         if direction == 'L':
@@ -111,9 +106,9 @@ class TuringMachine:
                 condition = instruction.getCondition()
 
                 if self.tape.read(self.pointer) == condition[0]:
-                    self.movePtr(condition[2], 1)
                     if condition[1] != '':
                         self.tape.write(self.pointer, condition[1])
+                    self.movePtr(condition[2], 1)
                     self.curState = instruction.getEndState()
 
         if self.curState == "Y":
