@@ -21,9 +21,15 @@ class Tape:
     def write(self, position, value):
         self.contents[position] = value
 
+    def print(self):
+        for char in self.contents:
+            print(char, end="")
+        print("")
+
 class Instruction:
     '''
-        Turing Machine code
+        Part of a Turing Machine code {initial state}{read}{target state(endState)}{write}{pointer movement}
+        {read}{write}{pointer movement} is encapsulated in member variable `condition`
     '''
 
     def __init__(self, endState, condition):
@@ -98,7 +104,8 @@ class TuringMachine:
         self.curState = initState
 
         while (self.curState != "Y" and self.curState != "N"):
-
+            # find the corresponding instruction for the current state,
+            # according to contents read by the pointer
             for instruction in self.adjList[self.curState]:
 
                 condition = instruction.getCondition()
@@ -114,8 +121,10 @@ class TuringMachine:
         elif self.curState == "N":
             print("NO")
         else:
-            print("ERROR")
+            print(self.curState)
     
+    def getTape(self):
+        return self.tape
 
 
     

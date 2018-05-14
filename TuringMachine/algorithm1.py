@@ -27,14 +27,13 @@ if __name__ == "__main__":
 
     # This input has only '1', NO '11', ends at '#'
     tape = TM.Tape(['*', '0', '0', '1', '0', '0', '0', '0', '0', '0', '#', '1', '1']) 
-    # This input has a '11'
-    tapeGood = TM.Tape(['*', '0', '0', '0', '0', '0', '1', '1', '0', '0', '#'])
-
-    # This TM decides if the input has a '11'
-    # Says "YES" if one or more '11' exists, otherwise "NO"
+    tape.print()
     findTwoConsecutiveOnes = TM.TuringMachine(tape, states)
     findTwoConsecutiveOnes.execute("S1")
 
+    # This input has a '11'
+    tapeGood = TM.Tape(['*', '0', '0', '0', '0', '0', '1', '1', '0', '0', '#'])
+    tapeGood.print()
     findTwoConsecutiveOnes = TM.TuringMachine(tapeGood, states)
     findTwoConsecutiveOnes.execute("S1")
 
