@@ -15,6 +15,7 @@ class Tape:
     def __init__(self, lst):
         self.contents = lst
 
+
     def read(self, position):
         return self.contents[position]
 
@@ -61,23 +62,24 @@ class Instruction:
 class TuringMachine:
     '''
         A turing machine(TM) is a "machine" consisting of a finite number of states,
-        a pointer capable of moving left/right on a paper tape and reading/writing characters,
+        a pointer capable of moving left/right on a infinite-long paper tape and reading/writing characters,
         
         The TM takes a Tape as input.
         The machine is capable of solving decision problems.(turing-decidable languages)
     '''
 
-    def __init__(self, tape, states):
+    def __init__(self, states):
         '''
-            @param tape:    A tape, input for the TM
+            
             @param states:  A directed weighed graph of different machine states
                             Edge q0 --(condition)--> q1
                             means if current state is in q0 and pointer reads (condition)
                             The states are stored in a python dict(), dict[state] = Instruction
         '''
-        self.tape = tape
+       # self.tape = tape
         self.adjList = states
         self.pointer = 0
+    
 
     def movePtr(self, direction, steps):
         '''
@@ -92,38 +94,37 @@ class TuringMachine:
         elif direction == 'R':
             self.pointer += steps
 
-    def execute(self, initState):
+    def execute(self, tape, initState):
         '''
+            @param tape: input tape
             @param initState: string, the initial state of the TM
         '''
-        self.curState = initState
+        self.pointer = 0
+        curState = initState
 
-        while (self.curState != "Y" and self.curState != "N"):
+        while (curState != "Y" and curState != "N"):
             # find the corresponding instruction for the current state,
             # according to contents read by the pointer
-            for instruction in self.adjList[self.curState]:
-
+            for instruction in self.adjList[curState]:
+                
                 condition = instruction.getCondition()
 
-                if self.tape.read(self.pointer) == condition[0]:
+                if tape.read(self.pointer) == condition[0]:
                     if condition[1] != '':
-                        self.tape.write(self.pointer, condition[1])
+                        tape.write(self.pointer, condition[1])
                     self.movePtr(condition[2], 1)
-                    self.curState = instruction.getEndState()
+                    curState = instruction.getEndState()
 
-        if self.curState == "Y":
+        if curState == "Y":
             print("YES")
-        elif self.curState == "N":
+        elif curState == "N":
             print("NO")
         else:
-            print(self.curState)
+            print(curState)
     
-    def getTape(self):
-        return self.tape
-
 
     
 
 if __name__ == "__main__":
-    print("\nAuthor: alexZr\nImport this file in other .py files to use its content.")
+    print("\nAuthor: alexZrAl\nImport this file in other .py files to use its content.")
     

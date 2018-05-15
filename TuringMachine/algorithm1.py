@@ -40,20 +40,19 @@ def getStatesFromFile(filename):
 
 if __name__ == "__main__":
     
-
+    # construct turing machine
     states = getStatesFromFile("FindTwo1.txt")
-
+    findTwoConsecutiveOnes = TM.TuringMachine(states)
+    
     # This input has only '1', NO '11', ends at '#'
     print("Tape 1, does not have substring \'11\':")
-    tape = TM.Tape(['*', '0', '0', '1', '0', '0', '0', '0', '0', '0', '#', '1', '1']) 
-    tape.print()
-    findTwoConsecutiveOnes = TM.TuringMachine(tape, states)
-    findTwoConsecutiveOnes.execute("S1")
+    tapeNo = TM.Tape(['*', '0', '0', '1', '0', '0', '0', '0', '0', '0', '#', '1', '1']) 
+    tapeNo.print()
+    findTwoConsecutiveOnes.execute(tapeNo, "S1")
 
     # This input has a '11'
     print("Tape 2, does have substring \'11\':")
     tapeGood = TM.Tape(['*', '0', '0', '0', '0', '0', '1', '1', '0', '0', '#'])
     tapeGood.print()
-    findTwoConsecutiveOnes = TM.TuringMachine(tapeGood, states)
-    findTwoConsecutiveOnes.execute("S1")
+    findTwoConsecutiveOnes.execute(tapeGood, "S1")
 
